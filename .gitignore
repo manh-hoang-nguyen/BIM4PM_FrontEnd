@@ -10,7 +10,7 @@
 
 # production
 /build
-/setupProxy.js
+setupProxy.js
 # misc
 .DS_Store
 .env.local
