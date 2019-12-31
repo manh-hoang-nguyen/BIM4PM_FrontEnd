@@ -4,13 +4,13 @@ import { connect } from "react-redux";
 import { Formik, Field, Form, useField } from "formik";
 import { TextField, Button, Card, CardContent } from "@material-ui/core";
 import * as yup from "yup";
-import { makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import { login } from "../../../store/actions/auth";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import MHFeild from "../../../components/UI/Input/TextField";
-import useStyles from "./styles";
+import styles from "./styles";
 import ClipLoader from "react-spinners/ClipLoader";
-import SyncLoader from 'react-spinners/SyncLoader'
+import SyncLoader from "react-spinners/SyncLoader";
 import { css } from "@emotion/core";
 
 const override = css`
@@ -30,8 +30,13 @@ const validationSchema = yup.object({
     .min(8)
 });
 
-const Login = ({ isAuthenticated, loading, login, authRedirectPath }) => {
-  const classes = useStyles();
+const Login = ({
+  isAuthenticated,
+  loading,
+  login,
+  authRedirectPath,
+  classes
+}) => {
   const submitHandler = ({ email, password }) => {
     login(email, password);
   };
@@ -70,10 +75,9 @@ const Login = ({ isAuthenticated, loading, login, authRedirectPath }) => {
             </div>
 
             <Button
-              style={{ width: "100%" }}
-              variant="contained"
+              size="small"
+              variant="outlined"
               color="primary"
-            
               type="submit"
             >
               <SyncLoader
@@ -83,7 +87,7 @@ const Login = ({ isAuthenticated, loading, login, authRedirectPath }) => {
                 color={"#50E3C2"}
                 loading={loading}
               />{" "}
-              {loading? null:"Login"}
+              {loading ? null : "Login"}
             </Button>
           </Form>
         )}
@@ -100,4 +104,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login })(withStyles(styles)(Login));

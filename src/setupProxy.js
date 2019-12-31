@@ -3,7 +3,7 @@ module.exports = function(app) {
   app.use(
     '/api',
     proxy({
-      target: 'https://manhhoang-api.herokuapp.com',
+      target: 'http://localhost:5000',
       changeOrigin: true,
     })
   );

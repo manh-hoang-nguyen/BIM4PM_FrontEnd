@@ -1,12 +1,13 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { Divider } from "@material-ui/core";
 
 const useStyles = makeStyles({
   root: {
     width: "100%", 
     color:"black",
-    borderBottom: "1px solid #eef0f1"
+   
   }
 });
 export const Project = props => {
@@ -21,6 +22,7 @@ export const Project = props => {
           {props.description}
         </Typography>
       </a>
+      <Divider />
     </div>
   );
 };

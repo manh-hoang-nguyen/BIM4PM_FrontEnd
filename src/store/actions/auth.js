@@ -34,9 +34,9 @@ export const register = (firstName, lastName, email, password)=> async dispatch=
         dispatch(loadUser());
     } catch (error) {
         const errors = error.response.data.errors;
-
+      
         if (errors) {
-            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+            errors.forEach(error => dispatch(setAlert(error, 'danger')));
         }
         dispatch({
             type: REGISTER_FAIL 
@@ -77,16 +77,17 @@ export const login = ( email, password )=> async dispatch=>{
 
     try {
         const res = await axios.post('/api/v1/auth/login', body, config);
-        console.log(res)
+        setAuthToken(res.data.token);
         dispatch({
             type:LOGIN_SUCCESS,
             payload: res.data
         });
-
+       
         dispatch(loadUser());
     } catch (error) {
         const errors = error.response.data.errors;
-
+        console.log(error)
+        dispatch(setAlert(error.toString(), 'danger'))
         if (errors) {
             errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
         }

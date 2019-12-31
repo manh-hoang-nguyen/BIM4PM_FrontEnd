@@ -1,25 +1,19 @@
-import { makeStyles } from "@material-ui/core/styles";
-
-  const classes = makeStyles(theme => ({
+const styles = () => ({
   paper: {
-    marginTop: theme.spacing(8),
-    
-    flexDirection: "column",
-    alignItems: "center",
-    width:"50%"
+    width: "100%",
+    display: "inline-block"
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    margin: "auto",
+    width: "50%", // Fix IE 11 issue.
+    alignItems: "center",
+    display: "block"
   },
   textFeild: {
     minWidth: 275,
-    width: "100%",
-    fontSize: "10px"
+    width: "100%"
   },
-  submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
-}));
+  submit: {}
+});
 
-export default classes;
+export default styles;
