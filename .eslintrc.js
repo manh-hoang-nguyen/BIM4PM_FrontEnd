@@ -1,6 +1,54 @@
-module.exports ={
-    parser: "babel-eslint",
-    rules:{
-        semi:1
-    }
-}
+module.exports = {
+  parser: 'babel-eslint',
+  parserOptions: {
+    ecmaVersion: 6,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'airbnb',
+    'prettier',
+  ],
+  rules: {
+    'react/prop-types': 1,
+    'react/jsx-max-props-per-line': 1,
+    'linebreak-style': 0,
+    'import/no-extraneous-dependencies': 0,
+    'class-methods-use-this': 0,
+    'react/jsx-filename-extension': 0,
+    'react/jsx-one-expression-per-line': 0,
+    'react/forbid-prop-types': 0,
+    'react/require-default-props': 0,
+    'eslint-disable-next-line': 0,
+    'no-underscore-dangle': 0,
+    'no-unused-vars': 1,
+    'import/extensions': 0,
+    'import/order': 1,
+    'import/prefer-default-export': 0,
+    'no-use-before-define': 0,
+    'no-param-reassign': 0,
+    'import/no-useless-path-segments': 0,
+    'react/jsx-uses-vars': 2,
+    'react/jsx-closing-bracket-location': 1,
+    'react/jsx-first-prop-new': 0,
+    'react/jsx-props-no-spreading': 0,
+    'no-shadow': 0,
+    'import/order': 0,
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
+  },
+  plugins: ['prettier'],
+  env: {
+    es6: true,
+    browser: true,
+    node: true,
+  },
+};

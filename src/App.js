@@ -1,18 +1,18 @@
-import React, { Fragment, useEffect } from "react";
-import { BrowserRouter , Route, Switch } from "react-router-dom";
-import Navbar from "./components/layout/Navbar";
-import Landing from "./components/layout/Landing";
-import theme from './shared/theme'
-import "./App.css";
+import React, { useEffect } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-//Redux
-import { Provider } from "react-redux";
-import store from "./store";
-import { loadUser } from "./store/actions/auth";
-import setAuthToken from "./utils/setAuthToken";
+import Landing from './components/layout/Landing';
+import theme from './shared/theme';
 
-import Routes from "./pages/routing/Routes";
-import { ThemeProvider } from "@material-ui/core/styles";
+// Redux
+import { Provider } from 'react-redux';
+import store from './store/store';
+import { loadUser } from './store/actions/auth';
+import setAuthToken from './utils/setAuthToken';
+
+import Routes from './pages/routing/Routes';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { CssBaseline } from '@material-ui/core';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -26,14 +26,13 @@ const App = () => {
   return (
     <Provider store={store}>
       <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <Fragment>
-          <Navbar />
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+
           <Switch>
-            <Route exact path="/" component={Landing}></Route>
+            <Route exact path="/" component={Landing} />
             <Route component={Routes} />
           </Switch>
-        </Fragment>
         </ThemeProvider>
       </BrowserRouter>
     </Provider>

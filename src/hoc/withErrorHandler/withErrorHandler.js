@@ -1,19 +1,19 @@
-import React, { Fragment} from "react";
+import React from 'react';
 
-import Modal from "../../components/UI/Modal/Modal";
-import httpErrorHandler from '../../hooks/http-error-handler'
+import httpErrorHandler from '../../hooks/http-error-handler';
+import { Modal } from '@material-ui/core';
 
 const withErrorHandler = (WrappedComponent, axios) => {
   return props => {
-   const [error, clearError] = httpErrorHandler(axios)
+    const [error, clearError] = httpErrorHandler(axios);
 
     return (
-      <Fragment>
+      <>
         <Modal show={error} modalClosed={clearError}>
           {error ? error.message : null}
         </Modal>
         <WrappedComponent {...props} />
-      </Fragment>
+      </>
     );
   };
 };

@@ -1,22 +1,12 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React from 'react';
+import { connect } from 'react-redux';
 
-export class Comments extends Component {
-    render() {
-        return (
-            <div>
-                
-            </div>
-        )
-    }
-}
+const Comments = () => {
+  return <div>Comments</div>;
+};
 
-const mapStateToProps = (state) => ({
-    
-})
+const mapStateToProps = () => ({});
 
-const mapDispatchToProps = {
-    
-}
+const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Comments)
+export default connect(mapStateToProps, mapDispatchToProps)(Comments);

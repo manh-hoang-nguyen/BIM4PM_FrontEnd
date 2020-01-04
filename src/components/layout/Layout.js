@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
-export const Layout = (props) => {
+export const Layout = props => {
+  // eslint-disable-next-line react/prop-types
+  const { children } = props;
   return (
-    <React.Fragment>
+    <>
       <div>Layout</div>
-      <main>
-          {props.children}
-      </main>
-    </React.Fragment>
+      <main>{children}</main>
+    </>
   );
 };

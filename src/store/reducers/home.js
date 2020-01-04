@@ -1,26 +1,26 @@
-import { HOME_SUCCESS, HOME_FAIL } from "../actions/types";
+import { HOME_SUCCESS, HOME_FAIL } from '../actions/types';
 
 const initialState = {
   projects: [],
   loading: true,
-  error: null
+  error: null,
 };
 
- const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
     case HOME_SUCCESS:
       return {
         ...state,
         projects: payload,
-        loading: false
+        loading: false,
       };
     case HOME_FAIL:
-        return {
-            ...state,
-            error: payload,
-            loading: false
-        }
+      return {
+        ...state,
+        error: payload,
+        loading: false,
+      };
     default:
       return state;
   }

@@ -1,19 +1,27 @@
-const styles = () => ({
-  paper: {
-    width: "100%",
-    display: "inline-block"
+const styles = theme => ({
+  background: {
+    backgroundColor: theme.palette.primary.main,
+    padding: 40,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '100vh',
+    textAlign: 'center',
+    flex: '1 0 auto',
   },
+
   form: {
-    margin: "auto",
-    width: "50%", // Fix IE 11 issue.
-    alignItems: "center",
-    display: "block"
+    margin: 'auto',
+
+    alignItems: 'center',
+    display: 'block',
   },
   textFeild: {
     minWidth: 275,
-    width: "100%"
+    width: '100%',
   },
-  submit: {}
+  submit: {},
 });
 
 export default styles;

@@ -1,30 +1,31 @@
-import React from "react";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import { Divider } from "@material-ui/core";
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
+import { Divider } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import styles from './styles';
 
-const useStyles = makeStyles({
-  root: {
-    width: "100%", 
-    color:"black",
-   
-  }
-});
 export const Project = props => {
-  const classes = useStyles();
+  const { link, name, description, classes } = props;
+
   return (
     <div className={classes.root}>
-      <a href={props.link}  >
-        <Typography variant="h5" gutterBottom>
-          {props.name}
+      <a href={link}>
+        <Typography variant="body1" className={classes.name}>
+          {name}
         </Typography>
-        <Typography variant="subtitle1" gutterBottom>
-          {props.description}
+        <Typography variant="body2" className={classes.description}>
+          {description}
         </Typography>
       </a>
       <Divider />
     </div>
   );
 };
-
-export default Project;
+Project.propTypes = {
+  link: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  classes: PropTypes.object,
+};
+export default withStyles(styles)(Project);

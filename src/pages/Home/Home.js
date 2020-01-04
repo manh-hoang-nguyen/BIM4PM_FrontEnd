@@ -1,42 +1,28 @@
-import React, { useEffect, Fragment } from "react";
-import { connect } from "react-redux";
-import Axios from "axios";
-
-import Spinner from "../../components/UI/Spinner/Spinner";
-import ProjectItem from "../../components/Project/ProjectItem";
-import { getProjects } from "../../store/actions/home";
-import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
- 
-
-import Card from "@material-ui/core/Card"; 
-import CardContent from "@material-ui/core/CardContent"; 
-import Typography from "@material-ui/core/Typography";
-import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import clsx from "clsx";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import { Button, withStyles } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import Modal from '@material-ui/core/Modal';
-import useStyles from "./style";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
- 
-import CreateProjectForm from "./CreateProjectForm/CreateProjectForm";
+import Typography from '@material-ui/core/Typography';
+import Axios from 'axios';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import ProjectItem from '../../components/Project/ProjectItem';
+import { css } from '@emotion/core';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import { fetchProjects } from '../../store/actions/home';
+import CreateProjectForm from './CreateProjectForm/CreateProjectForm';
+import SyncLoader from 'react-spinners/SyncLoader';
+import PropTypes from 'prop-types';
+import styles from './styles';
+
 function rand() {
   return Math.round(Math.random() * 20) - 10;
 }
-
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 function getModalStyle() {
   const top = 50 + rand();
   const left = 50 + rand();
@@ -44,16 +30,13 @@ function getModalStyle() {
   return {
     top: `${top}%`,
     left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`
+    transform: `translate(-${top}%, -${left}%)`,
   };
 }
- 
-const Home = props => {
-  const { projects, loading, error, getProjects } = props;
-  const classes = useStyles();
 
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+const Home = props => {
+  const { projects, loading, error, fetchProjects, classes } = props;
+
   const [modalStyle] = React.useState(getModalStyle);
   const [openModal, setOpenModal] = React.useState(false);
 
@@ -64,21 +47,22 @@ const Home = props => {
   const handleClose = () => {
     setOpenModal(false);
   };
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
   useEffect(() => {
-    getProjects();
-  }, [getProjects]);
+    fetchProjects();
+  }, [fetchProjects]);
 
   let fetchedProjects;
-  fetchedProjects = <Spinner />;
+  fetchedProjects = (
+    <SyncLoader
+      css={override}
+      size={10}
+      // size={"150px"} this also works
+      color="#50E3C2"
+    />
+  );
 
-  if (error !== null) fetchedProjects = <p> Projects can't be loaded</p>;
+  if (error !== null) fetchedProjects = <p> Projects can not be loaded</p>;
 
   if (error === null && !loading) {
     fetchedProjects = projects.map(project => (
@@ -92,75 +76,6 @@ const Home = props => {
   }
   return (
     <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open
-        })}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open
-            })}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Mini variant drawer
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open
-          })
-        }}
-      >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
       <div>
         <Card className={classes.card}>
           <CardContent>
@@ -175,18 +90,16 @@ const Home = props => {
           </CardContent>
         </Card>
       </div>
-      <div >
+      <div>
         <Button onClick={handleOpen}>Create Project</Button>
         <Modal
-        
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
           open={openModal}
           onClose={handleClose}
         >
-          <div style={{height: "auto"}} style={modalStyle} className={classes.paper}>
-            <CreateProjectForm></CreateProjectForm>
-            
+          <div style={modalStyle} className={classes.paper}>
+            <CreateProjectForm />
           </div>
         </Modal>
       </div>
@@ -194,14 +107,22 @@ const Home = props => {
   );
 };
 
+Home.propTypes = {
+  projects: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.object,
+  classes: PropTypes.object,
+  fetchProjects: PropTypes.func.isRequired,
+};
+
 const mapStateToprops = state => {
   return {
     projects: state.home.projects,
     loading: state.home.loading,
-    error: state.home.error
+    error: state.home.error,
   };
 };
 
-export default connect(mapStateToprops, { getProjects })(
-  withErrorHandler(Home, Axios)
+export default connect(mapStateToprops, { fetchProjects })(
+  withErrorHandler(withStyles(styles)(Home), Axios),
 );

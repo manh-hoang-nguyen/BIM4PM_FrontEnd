@@ -1,28 +1,49 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-import { connect } from 'react-redux'
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import NotFound from '../../components/layout/NotFound';
+import Alert from '../../components/layout/Alert';
 
-import PrivateRoute from "../routing/PrivateRoute";
-import NotFound from "../../components/layout/NotFound";
-import Login from "../auth/Login/Login";
-import Register from "../auth//Signup/Signup";
-import Dashboard from "../dashboard/Dashboard";
-import  Home  from "../Home/Home";
-import Alert from "../../components/layout/Alert";
+import { PRIVATE_ROUTES, PUBLIC_ROUTES } from '../../constants';
+import DefaultLayout from '../../hoc/Layout/DefaultLayout';
+import PrivateRoute from './PrivateRoute';
+
 const Routes = () => {
+  const publicRoutes = () => {
+    let xhtml = null;
+    xhtml = PUBLIC_ROUTES.map(route => (
+      <DefaultLayout
+        key={route.path}
+        path={route.path}
+        component={route.component}
+        exact={route.exact}
+        name={route.name}
+      />
+    ));
+    return xhtml;
+  };
+  const privateRoutes = () => {
+    let xhtml = null;
+    xhtml = PRIVATE_ROUTES.map(route => (
+      <PrivateRoute
+        key={route.path}
+        path={route.path}
+        component={route.component}
+        exact={route.exact}
+        name={route.name}
+      />
+    ));
+    return xhtml;
+  };
   return (
-    <section className="container"  style={{height: "100%", width:"100%"}}>
+    <section className="container" style={{ height: '100%', width: '100%' }}>
       <Alert />
       <Switch>
-        <Route exact path="/register" component={Register}></Route>
-        <Route exact path="/login" component={Login}></Route>
-        <PrivateRoute exact path="/dashboard" component={Dashboard} />
-        <PrivateRoute exact path="/home" component={Home} />
+        {publicRoutes()}
+        {privateRoutes()}
         <Route component={NotFound} />
       </Switch>
     </section>
   );
 };
 
-
-export default  Routes;
+export default Routes;
