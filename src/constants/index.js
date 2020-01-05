@@ -3,7 +3,7 @@ import Signup from '../pages/auth/Signup/Signup';
 
 import Home from '../pages/Home/Home';
 
-export const API_ENDPOINT = 'http:localhost:5000';
+export const API_ENDPOINT = 'http://localhost:5000';
 
 export const PUBLIC_ROUTES = [
   {
