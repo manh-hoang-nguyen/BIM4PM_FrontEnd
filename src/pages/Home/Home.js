@@ -67,7 +67,7 @@ const Home = props => {
   if (error === null && !loading) {
     fetchedProjects = projects.map(project => (
       <ProjectItem
-        link={`http://localhost:3000/projects/${project._id}`}
+        link={`http://localhost:3000/project/${project._id}`}
         key={project._id}
         name={project.name}
         description={project.description}
