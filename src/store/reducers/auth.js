@@ -6,14 +6,15 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  LOGIN_START,
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
-  loading: true,
+  loading: false,
   user: null,
-  authRedirectPath: '/home',
+  authRedirectPath: '/',
 };
 export default function(state = initialState, action) {
   const { type, payload } = action;
@@ -25,6 +26,11 @@ export default function(state = initialState, action) {
         isAuthenticated: true,
         loading: false,
         user: payload,
+      };
+    case LOGIN_START:
+      return {
+        ...state,
+        loading: true,
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:

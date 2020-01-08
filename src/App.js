@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import Landing from './components/layout/Landing';
 import theme from './shared/theme';
 
 // Redux
@@ -30,7 +29,6 @@ const App = () => {
           <CssBaseline />
 
           <Switch>
-            <Route exact path="/" component={Landing} />
             <Route component={Routes} />
           </Switch>
         </ThemeProvider>

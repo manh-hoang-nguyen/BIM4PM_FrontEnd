@@ -36,6 +36,7 @@ module.exports = {
     'react/jsx-closing-bracket-location': 1,
     'react/jsx-first-prop-new': 0,
     'react/jsx-props-no-spreading': 0,
+    'react/no-unescaped-entities': 0,
     'no-shadow': 0,
     'import/order': 0,
     'prettier/prettier': [

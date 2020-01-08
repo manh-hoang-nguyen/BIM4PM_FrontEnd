@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
@@ -68,8 +68,8 @@ const Login = ({
                   />
 
                   <Button
-                    size="small"
-                    variant="outlined"
+                    style={{ width: '100%' }}
+                    variant="contained"
                     color="primary"
                     type="submit"
                   >
@@ -82,6 +82,9 @@ const Login = ({
                     />{' '}
                     {loading ? null : 'Login'}
                   </Button>
+                  <p>
+                    Don't have account yet? <Link to="/register">Register</Link>
+                  </p>
                 </Form>
               )}
             </Formik>

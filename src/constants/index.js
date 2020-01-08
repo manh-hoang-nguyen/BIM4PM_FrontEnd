@@ -29,7 +29,7 @@ export const PRIVATE_ROUTES = [
   },
   {
     name: 'Home',
-    path: '/home',
+    path: '/',
     exact: true,
     component: Home,
   },
@@ -44,7 +44,7 @@ export const SIDEBAR_ROUTES = [
   },
   {
     name: 'Home',
-    path: '/home',
+    path: '/',
     exact: true,
     component: Home,
   },

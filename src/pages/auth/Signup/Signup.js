@@ -1,7 +1,7 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
-import { Button } from '@material-ui/core';
+import { Button, Card, CardContent } from '@material-ui/core';
 import * as yup from 'yup';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -26,7 +26,7 @@ const validationSchema = yup.object({
     .oneOf([yup.ref('password'), null], 'Passwords must match'),
 });
 
-const Signup = ({ isAuthenticated, register, authRedirectPath }) => {
+const Signup = ({ isAuthenticated, register, authRedirectPath, classes }) => {
   const submitHandler = ({ firstName, lastName, email, password }) => {
     register(firstName, lastName, email, password);
   };
@@ -35,60 +35,73 @@ const Signup = ({ isAuthenticated, register, authRedirectPath }) => {
     return <Redirect to={authRedirectPath} />;
   }
   return (
-    <div>
-      <Formik
-        validateOnChange
-        initialValues={{
-          firstName: '',
-          lastName: '',
-          email: '',
-          password: '',
-          passwordConfirmation: '',
-        }}
-        validationSchema={validationSchema}
-        onSubmit={submitHandler}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <MHFeild
-              placeholder="First Name"
-              name="firstName"
-              variant="outlined"
-            />
-            <MHFeild
-              placeholder="Last Name"
-              name="lastName"
-              variant="outlined"
-            />
-            <MHFeild placeholder="Email" name="email" variant="outlined" />
-            <div>
-              <MHFeild
-                placeholder="Password"
-                name="password"
-                type="password"
-                variant="outlined"
-              />
-              <div>
-                <MHFeild
-                  placeholder="Password Confirmation"
-                  name="passwordConfirmation"
-                  type="password"
-                  variant="outlined"
-                />
-              </div>
-            </div>
-            <Button
-              style={{ width: '100%' }}
-              variant="contained"
-              color="primary"
-              disabled={isSubmitting}
-              type="submit"
+    <div className={classes.background}>
+      <div classes={classes.login}>
+        <Card>
+          <CardContent>
+            <Formik
+              validateOnChange
+              initialValues={{
+                firstName: '',
+                lastName: '',
+                email: '',
+                password: '',
+                passwordConfirmation: '',
+              }}
+              validationSchema={validationSchema}
+              onSubmit={submitHandler}
             >
-              submit
-            </Button>
-          </Form>
-        )}
-      </Formik>
+              {({ isSubmitting }) => (
+                <Form>
+                  <MHFeild
+                    placeholder="First Name"
+                    name="firstName"
+                    variant="outlined"
+                  />
+                  <MHFeild
+                    placeholder="Last Name"
+                    name="lastName"
+                    variant="outlined"
+                  />
+                  <MHFeild
+                    placeholder="Email"
+                    name="email"
+                    variant="outlined"
+                  />
+                  <div>
+                    <MHFeild
+                      placeholder="Password"
+                      name="password"
+                      type="password"
+                      variant="outlined"
+                    />
+                    <div>
+                      <MHFeild
+                        placeholder="Password Confirmation"
+                        name="passwordConfirmation"
+                        type="password"
+                        variant="outlined"
+                      />
+                    </div>
+                  </div>
+                  <Button
+                    style={{ width: '100%' }}
+                    variant="contained"
+                    color="primary"
+                    disabled={isSubmitting}
+                    type="submit"
+                  >
+                    submit
+                  </Button>
+                  <p>
+                    Have an account? <Link to="/login">Login</Link>
+                  </p>
+                </Form>
+              )}
+            </Formik>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
@@ -97,6 +110,7 @@ Signup.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   authRedirectPath: PropTypes.string.isRequired,
   register: PropTypes.func.isRequired,
+  classes: PropTypes.object,
 };
 const mapStateToProps = state => {
   return {
