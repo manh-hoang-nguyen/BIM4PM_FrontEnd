@@ -56,8 +56,7 @@ CreateProjectForm.propTypes = {
   create: PropTypes.func.isRequired,
 };
 const mapStateToProps = state => ({
-  project: state.project.project,
-  loading: state.project.loading,
+  loading: state.home.loading,
 });
 
 const mapDispatchToProps = { create };

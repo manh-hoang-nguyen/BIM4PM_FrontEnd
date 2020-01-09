@@ -3,7 +3,7 @@ import Signup from '../pages/auth/Signup/Signup';
 
 import Home from '../pages/Home/Home';
 import Schedules from '../pages/Project/Schedule/Schedules';
-import Project from '../pages/Project/Project';
+
 // export const API_ENDPOINT = 'http://localhost:5000';
 
 export const PUBLIC_ROUTES = [
@@ -39,11 +39,6 @@ export const PRIVATE_ROUTES = [
     path: '/schedule',
     exact: true,
     component: Schedules,
-  },
-   {
-    path: '/project/:id',
-    exact: true,
-    component: Project,
   },
 ];
 
