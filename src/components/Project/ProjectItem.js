@@ -4,20 +4,21 @@ import { withStyles } from '@material-ui/core/styles';
 import { Divider } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import styles from './styles';
+import { Link } from 'react-router-dom';
 
 export const Project = props => {
   const { link, name, description, classes } = props;
 
   return (
     <div className={classes.root}>
-      <a href={link}>
+      <Link to={link}>
         <Typography variant="body1" className={classes.name}>
           {name}
         </Typography>
         <Typography variant="body2" className={classes.description}>
           {description}
         </Typography>
-      </a>
+      </Link>
       <Divider />
     </div>
   );

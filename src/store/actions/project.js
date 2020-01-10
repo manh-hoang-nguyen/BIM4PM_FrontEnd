@@ -21,7 +21,7 @@ export const create = (name, description) => async dispatch => {
       type: PROJECT_CREATED_START,
     });
     const res = await axios.post('/api/v1/projects', body, config);
-    console.log(res.data.data);
+
     dispatch({
       type: PROJECT_CREATED_SUCCESS,
       payload: res.data.data,

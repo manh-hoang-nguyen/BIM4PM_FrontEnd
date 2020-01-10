@@ -19,6 +19,7 @@ import { styles } from './styles';
 import PropTypes from 'prop-types';
 import { logout } from '../../../../store/actions/auth';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const Header = props => {
   const { classes, children, logout } = props;
@@ -120,10 +121,11 @@ const Header = props => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            BIM4PM
-          </Typography>
-
+          <Link to="/" className={classes.title}>
+            <Typography variant="h6" noWrap>
+              BIM4PM
+            </Typography>
+          </Link>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 4 new mails" color="inherit">
