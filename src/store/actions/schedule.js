@@ -30,7 +30,7 @@ export const fetchCatAndParam = projectId => async dispatch => {
     });
 
     const res = await axios.get(
-      `${API_ENDPOINT}/project/${projectId}/parametersofcategory`,
+      `${API_ENDPOINT}/api/v1/projects/${projectId}/category`,
     );
 
     dispatch({

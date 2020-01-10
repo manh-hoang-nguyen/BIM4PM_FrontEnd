@@ -96,7 +96,7 @@ const Login = ({
 };
 
 Login.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool,
   loading: PropTypes.bool.isRequired,
   authRedirectPath: PropTypes.string.isRequired,
   login: PropTypes.func.isRequired,

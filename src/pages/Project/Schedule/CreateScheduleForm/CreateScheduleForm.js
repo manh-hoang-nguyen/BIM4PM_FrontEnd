@@ -17,21 +17,33 @@ import {
 } from '@material-ui/core';
 
 const CreateScheduleForm = props => {
-  const [checked, setChecked] = React.useState(false);
-  const [parameters, setParameters] = React.useState([]);
-
-  const handleChange = category => () => {
-    const newParam = parameters.concat(category);
-    setParameters(newParam);
-
-  };
-
   const { fetchCatAndParam, paramCategories, loading } = props;
   const { projectId } = useParams();
   useEffect(() => {
     fetchCatAndParam(projectId);
   }, [fetchCatAndParam]);
 
+  const [checked, setChecked] = React.useState(false);
+  const [parameters, setParameters] = React.useState([]);
+  const [categories, setCategories] = React.useState([]);
+
+  const handleChange = category => event => {
+    let checkedCategory;
+    let newParam;
+    if (event.target.checked) {
+      checkedCategory = [...new Set(categories.concat(category))];
+      const para = Object.keys(paramCategories).map(key => {
+        if (paramCategories[key].category === category) {
+          return paramCategories[key].parameters;
+        }
+      });
+      console.log(para);
+    } else {
+      checkedCategory = categories.filter(e => e !== category);
+    }
+
+    setCategories(checkedCategory);
+  };
   let xhtml;
   if (loading) {
     xhtml = <Spinner />;

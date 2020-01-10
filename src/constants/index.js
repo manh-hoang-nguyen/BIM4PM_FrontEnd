@@ -44,12 +44,6 @@ export const PRIVATE_ROUTES = [
 
 export const SIDEBAR_ROUTES = [
   {
-    name: 'Landing',
-    path: '/',
-    exact: true,
-    component: '',
-  },
-  {
     name: 'Home',
     path: '/',
     exact: true,
