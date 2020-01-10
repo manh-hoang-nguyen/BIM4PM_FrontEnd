@@ -23,7 +23,6 @@ const CreateScheduleForm = props => {
   const handleChange = category => () => {
     const newParam = parameters.concat(category);
     setParameters(newParam);
-
   };
 
   const { fetchCatAndParam, paramCategories, loading } = props;
