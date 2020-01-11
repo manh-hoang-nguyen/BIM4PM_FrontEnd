@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import NotFound from '../../components/layout/NotFound';
 import Alert from '../../components/layout/Alert';
 
-import { PRIVATE_ROUTES, PUBLIC_ROUTES } from '../../constants';
+import { PRIVATE_ROUTES, PUBLIC_ROUTES } from '../../constants/routes';
 import DefaultLayout from '../../hoc/Layout/DefaultLayout';
 import PrivateRoute from './PrivateRoute';
 

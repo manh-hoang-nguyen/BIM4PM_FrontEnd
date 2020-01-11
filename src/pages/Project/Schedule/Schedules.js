@@ -1,14 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { useParams, Link, useLocation } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
-import {
-  withStyles,
-  TableHead,
-  TableRow,
-  Button,
-  Modal,
-} from '@material-ui/core';
+import { withStyles, TableHead, TableRow, Button } from '@material-ui/core';
 import styles from './styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -17,22 +12,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 
 import TablePagination from '@material-ui/core/TablePagination';
 import uppercaseFirstLetter from '../../../utils/uppercaseFirstLetterString';
-import { useParams } from 'react-router-dom';
+
 import CreateScheduleForm from './CreateScheduleForm/CreateScheduleForm';
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
   { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
@@ -62,7 +44,7 @@ const rows = [];
 const Schedules = props => {
   const { loading, revitElements, classes, parameters } = props;
   const { projectId } = useParams();
-
+  const location = useLocation();
   const col = parameters.map(param => ({
     id: param.name,
     label: uppercaseFirstLetter(param.name),
@@ -73,16 +55,6 @@ const Schedules = props => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const [modalStyle] = React.useState(getModalStyle);
-  const [openModal, setOpenModal] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpenModal(true);
-  };
-
-  const handleClose = () => {
-    setOpenModal(false);
-  };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -95,17 +67,9 @@ const Schedules = props => {
   return (
     <div>
       <div>
-        <Button onClick={handleOpen}>Create Project</Button>
-        <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={openModal}
-          onClose={handleClose}
-        >
-          <div style={modalStyle} className={classes.paper}>
-            <CreateScheduleForm />
-          </div>
-        </Modal>
+        <Link to={`${location.pathname}/schedule/create`}>
+          Create Schedules
+        </Link>
       </div>
       <TableContainer>
         <Table stickyHeader aria-label="sticky table">

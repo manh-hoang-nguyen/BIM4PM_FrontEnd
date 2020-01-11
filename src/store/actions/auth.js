@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import { setAlert } from './alert';
 import {
   REGISTER_SUCCESS,
@@ -20,16 +21,10 @@ export const register = (
   email,
   password,
 ) => async dispatch => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-
   const body = JSON.stringify({ firstName, lastName, email, password });
 
   try {
-    const res = await axios.post('/api/v1/auth/register', body, config);
+    const res = await axios.post(`/api/v1/auth/register`, body);
 
     dispatch({
       type: REGISTER_SUCCESS,
@@ -51,7 +46,8 @@ export const loadUser = () => async dispatch => {
   }
 
   try {
-    const res = await axios.get('/api/v1/auth/me');
+    console.log(axios)
+    const res = await axios.get(`/api/v1/auth/me`);
 
     dispatch({
       type: USER_LOADED,
@@ -71,12 +67,11 @@ export const login = (email, password) => async dispatch => {
       'Content-Type': 'application/json',
     },
   };
-
   const body = JSON.stringify({ email, password });
 
   try {
     dispatch({ type: LOGIN_START });
-    const res = await axios.post('/api/v1/auth/login', body, config);
+    const res = await axios.post(`/api/v1/auth/login`, body, config);
     setAuthToken(res.data.token);
 
     dispatch({

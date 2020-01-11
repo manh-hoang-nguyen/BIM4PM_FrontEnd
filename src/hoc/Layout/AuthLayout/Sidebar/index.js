@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Drawer from '@material-ui/core/Drawer';
 import styles from './styles';
 import { withStyles, List, ListItem } from '@material-ui/core';
-import { SIDEBAR_ROUTES } from '../../../../constants';
+import { SIDEBAR_ROUTES } from '../../../../constants/routes';
 import { NavLink } from 'react-router-dom';
 
 const Sidebar = props => {
