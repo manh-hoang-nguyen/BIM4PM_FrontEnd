@@ -19,7 +19,7 @@ import { API_ENDPOINT } from '../../constants';
 export const getRevitElements = (projectId, categories) => async dispatch => {
   try {
     dispatch({ type: FETCH_REVITELEMENT_START });
-    console.log(categories);
+
     const params = {
       category: categories.join(','),
     };
@@ -135,6 +135,24 @@ export const getSchedule = (projectId, scheduleId) => async dispatch => {
       type: SCHEDULE_FETCHED_SUCCESS,
       payload: res.data.data,
     });
+    try {
+      dispatch({ type: FETCH_REVITELEMENT_START });
+
+      const params = {
+        category: res.data.data.categories.join(','),
+      };
+
+      const res1 = await axios.get(
+        `${API_ENDPOINT}/project/${projectId}/elements`,
+        {
+          params,
+        },
+      );
+
+      dispatch({ type: FETCH_REVITELEMENT_SUCCESS, payload: res1.data.data });
+    } catch (error) {
+      dispatch({ type: FETCH_REVITELEMENT_FAIL, payload: error });
+    }
   } catch (error) {
     dispatch({
       type: SCHEDULE_FETCHED_FAIL,
