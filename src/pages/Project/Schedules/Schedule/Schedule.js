@@ -66,18 +66,11 @@ const Schedule = props => {
   const [rows, setRows] = React.useState([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [pageSizes] = React.useState([5, 10, 15, 0]);
-  const [columnOrder, setColumnOrder] = React.useState([
-    'Largeur',
-    'Longueur',
-    'Name',
-    'Category',
-    'Level',
-    'Volume',
-    'Surace',
-  ]);
+  const [columnOrder, setColumnOrder] = React.useState([]);
 
   useEffect(() => {
     getSchedule(projectId, scheduleId);
+    setColumnOrder(parameters);
   }, [getSchedule]);
 
   const handleChangePage = (event, newPage) => {
