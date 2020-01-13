@@ -48,6 +48,7 @@ export default function(state = initialState, action) {
         ...state,
         loading: false,
         schedule: payload,
+        parameters: payload.parameters,
       };
     case FETCH_PARAMETERCATEGORY_FAIL:
     case FETCH_REVITELEMENT_FAIL:

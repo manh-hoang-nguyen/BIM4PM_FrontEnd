@@ -3,15 +3,35 @@ import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { Table, TableHead, TableRow, TablePagination } from '@material-ui/core';
+import {
+  Table,
+  TableHead,
+  TableRow,
+  TablePagination,
+  Paper,
+} from '@material-ui/core';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import Spinner from '../../../../components/UI/Spinner/Spinner';
+
 import {
-  getSchedule,
-  getRevitElements,
-} from '../../../../store/actions/schedule';
+  PagingState,
+  IntegratedPaging,
+  SearchState,
+  IntegratedFiltering,
+} from '@devexpress/dx-react-grid';
+import {
+  Grid,
+  Table as TableGrid,
+  TableHeaderRow,
+  PagingPanel,
+  SearchPanel,
+  Toolbar,
+  DragDropProvider,
+  TableColumnReordering,
+} from '@devexpress/dx-react-grid-material-ui';
+import Spinner from '../../../../components/UI/Spinner/Spinner';
+import { getSchedule } from '../../../../store/actions/schedule';
 
 // const columns = [
 //   { id: 'name', label: 'Name', minWidth: 170 },
@@ -38,29 +58,28 @@ import {
 //     format: value => value.toFixed(2),
 //   },
 // ];
-const rows = [];
+
 const Schedule = props => {
-  const {
-    loading,
-    getSchedule,
-    schedule: { name, parameters, categories },
-    getRevitElements,
-  } = props;
+  const { loading, getSchedule, parameters, revitElements } = props;
   const { projectId, scheduleId } = useParams();
   const [page, setPage] = React.useState(0);
+  const [rows, setRows] = React.useState([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [pageSizes] = React.useState([5, 10, 15, 0]);
+  const [columnOrder, setColumnOrder] = React.useState([
+    'Largeur',
+    'Longueur',
+    'Name',
+    'Category',
+    'Level',
+    'Volume',
+    'Surace',
+  ]);
 
   useEffect(() => {
     getSchedule(projectId, scheduleId);
-    getRevitElements(projectId, categories);
-  }, [getSchedule, getRevitElements]);
+  }, [getSchedule]);
 
-  let xhtml;
-  if (parameters !== undefined) {
-    xhtml = parameters.map(para => (
-      <TableCell key={Math.random()}>{para}</TableCell>
-    ));
-  }
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -69,31 +88,30 @@ const Schedule = props => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
   return loading ? (
     <Spinner />
   ) : (
     <div>
-      <TableContainer>
+      {/* <TableContainer>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
-            <TableRow>{xhtml}</TableRow>
+            <TableRow>
+              {parameters.map(para => (
+                <TableCell key={Math.random()}>{para}</TableCell>
+              ))}
+            </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {revitElements
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map(row => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {/* {columns.map(column => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })} */}
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
+                    {parameters.map(para => {
+                      const value = row[para];
+                      return <TableCell key={para}>{value}</TableCell>;
+                    })}
                   </TableRow>
                 );
               })}
@@ -108,7 +126,30 @@ const Schedule = props => {
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
+      /> */}
+      <div>
+        <Paper>
+          <Grid
+            rows={revitElements}
+            columns={parameters.map(para => ({ name: para }))}
+          >
+            <SearchState defaultValue="" />
+            <PagingState defaultCurrentPage={0} defaultPageSize={5} />
+            <IntegratedPaging />
+            <IntegratedFiltering />
+            <DragDropProvider />
+            <TableGrid />
+            <TableColumnReordering
+              order={columnOrder}
+              onOrderChange={setColumnOrder}
+            />
+            <TableHeaderRow />
+            <Toolbar />
+            <PagingPanel pageSizes={pageSizes} />
+            <SearchPanel />
+          </Grid>
+        </Paper>
+      </div>
     </div>
   );
 };
@@ -116,18 +157,17 @@ const Schedule = props => {
 Schedule.propTypes = {
   loading: PropTypes.bool,
   getSchedule: PropTypes.func.isRequired,
-  schedule: PropTypes.object.isRequired,
-  parameters: PropTypes.array,
-  getRevitElements: PropTypes.func.isRequired,
-  categories: PropTypes.array,
+  parameters: PropTypes.array.isRequired,
+  revitElements: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
     loading: state.schedule.loading,
-    schedule: state.schedule.schedule,
+    revitElements: state.schedule.revitElements,
+    parameters: state.schedule.parameters,
   };
 };
 
-const mapDispatchToProps = { getSchedule, getRevitElements };
+const mapDispatchToProps = { getSchedule };
 export default connect(mapStateToProps, mapDispatchToProps)(Schedule);

@@ -15,6 +15,7 @@ import {
 } from './types';
 
 import { API_ENDPOINT } from '../../constants';
+import serializeRevitElement from '../../utils/serializeRevitElement';
 
 export const getRevitElements = (projectId, categories) => async dispatch => {
   try {
@@ -149,7 +150,10 @@ export const getSchedule = (projectId, scheduleId) => async dispatch => {
         },
       );
 
-      dispatch({ type: FETCH_REVITELEMENT_SUCCESS, payload: res1.data.data });
+      const revitElements = res1.data.data.map(item =>
+        serializeRevitElement(item),
+      );
+      dispatch({ type: FETCH_REVITELEMENT_SUCCESS, payload: revitElements });
     } catch (error) {
       dispatch({ type: FETCH_REVITELEMENT_FAIL, payload: error });
     }
