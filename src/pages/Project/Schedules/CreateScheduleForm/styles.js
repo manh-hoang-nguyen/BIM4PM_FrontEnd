@@ -1,7 +1,6 @@
 const styles = theme => ({
   root: {
-    flexGrow: 1,
-    width: '100%',
+    width: 800,
   },
   paper: {
     height: 140,
@@ -21,7 +20,7 @@ const styles = theme => ({
   },
   listStep2: {
     width: 'auto',
-    height: 350,
+    height: 'auto',
     minWidth: 240,
     backgroundColor: theme.palette.background.paper,
     overflow: 'auto',

@@ -1,27 +1,41 @@
+import axios from 'axios';
 import {
   FETCH_PARAMETERCATEGORY_FAIL,
   FETCH_PARAMETERCATEGORY_START,
   FETCH_PARAMETERCATEGORY_SUCCESS,
+  SCHEDULE_CREATED_FAIL,
+  SCHEDULE_CREATED_START,
+  SCHEDULE_CREATED_SUCCESS,
+  SCHEDULE_FETCHED_FAIL,
+  SCHEDULE_FETCHED_START,
+  SCHEDULE_FETCHED_SUCCESS,
+  FETCH_REVITELEMENT_FAIL,
+  FETCH_REVITELEMENT_START,
+  FETCH_REVITELEMENT_SUCCESS,
 } from './types';
-// eslint-disable-next-line import/no-cycle
+
 import { API_ENDPOINT } from '../../constants';
 
-import axios from 'axios';
+export const getRevitElements = (projectId, categories) => async dispatch => {
+  try {
+    dispatch({ type: FETCH_REVITELEMENT_START });
+    console.log(categories);
+    const params = {
+      category: categories.join(','),
+    };
 
-// export const createSchedule = (name, formData) => async dispatch => {
-//   const config = {
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//   };
+    const res = await axios.get(
+      `${API_ENDPOINT}/project/${projectId}/elements`,
+      {
+        params,
+      },
+    );
 
-//   const body = JSON.stringify({ name, formData });
-//   try {
-
-//   } catch (error) {
-
-//   }
-// };
+    dispatch({ type: FETCH_REVITELEMENT_SUCCESS, payload: res.data.data });
+  } catch (error) {
+    dispatch({ type: FETCH_REVITELEMENT_FAIL, payload: error });
+  }
+};
 
 export const fetchCatAndParam = projectId => async dispatch => {
   try {
@@ -51,7 +65,7 @@ export const fetchProjects = projectId => async dispatch => {
   });
   try {
     const res = await axios.get(
-      `http://localhost:5000/project/${projectId}/parametersofcategory`,
+      `${API_ENDPOINT}/project/${projectId}/parametersofcategory`,
     );
 
     if (res.data.success) {
@@ -69,6 +83,62 @@ export const fetchProjects = projectId => async dispatch => {
     dispatch({
       type: FETCH_PARAMETERCATEGORY_FAIL,
       payload: err,
+    });
+  }
+};
+
+export const createSchedule = (
+  projectId,
+  name,
+  categories,
+  parameters,
+) => async dispatch => {
+  try {
+    dispatch({
+      type: SCHEDULE_CREATED_START,
+    });
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const body = JSON.stringify({ name, categories, parameters });
+
+    const res = await axios.post(
+      `/project/${projectId}/schedules`,
+      body,
+      config,
+    );
+    dispatch({
+      type: SCHEDULE_CREATED_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: SCHEDULE_CREATED_FAIL,
+      payload: error,
+    });
+  }
+};
+
+export const getSchedule = (projectId, scheduleId) => async dispatch => {
+  try {
+    dispatch({ type: SCHEDULE_FETCHED_START });
+
+    const res = await axios.get(
+      `${API_ENDPOINT}/project/${projectId}/schedules/${scheduleId}`,
+    );
+
+    dispatch({
+      type: SCHEDULE_FETCHED_SUCCESS,
+      payload: res.data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: SCHEDULE_FETCHED_FAIL,
+      payload: error,
     });
   }
 };
