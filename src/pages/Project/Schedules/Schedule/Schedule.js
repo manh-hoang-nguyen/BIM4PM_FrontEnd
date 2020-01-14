@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { Paper } from '@material-ui/core';
+import { Paper, Typography, Button } from '@material-ui/core';
 
 import {
   PagingState,
@@ -26,6 +26,7 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import Spinner from '../../../../components/UI/Spinner/Spinner';
 import { getSchedule } from '../../../../store/actions/schedule';
+import uppercaseFirstLetterString from '../../../../utils/uppercaseFirstLetterString';
 
 const Schedule = props => {
   const {
@@ -34,6 +35,7 @@ const Schedule = props => {
     parameters,
     revitElements,
     paramCategories,
+    schedule,
   } = props;
   const { projectId, scheduleId } = useParams();
 
@@ -41,7 +43,7 @@ const Schedule = props => {
   const [columnOrder, setColumnOrder] = React.useState();
   const [hiddenColumnNames, setHiddenColumnNames] = useState([]);
   const [columnWidths, setColumnWidths] = useState();
-
+  const location = useLocation();
   useEffect(() => {
     getSchedule(projectId, scheduleId);
   }, [getSchedule]);
@@ -49,11 +51,28 @@ const Schedule = props => {
   return loading ? (
     <Spinner />
   ) : (
-    <div>
+    <div style={{ margin: ' 3px 0' }}>
+      <div>
+        <Link
+          to={`${location.pathname}/modify`}
+          style={{ textDecoration: 'none' }}
+        >
+          <Button size="small" variant="outlined" color="primary">
+            Modify
+          </Button>
+        </Link>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', margin: '3px' }}>
+        <Typography variant="h5">{schedule.name}</Typography>
+      </div>
+
       <Paper>
         <Grid
           rows={revitElements}
-          columns={parameters.map(para => ({ name: para, title: para }))}
+          columns={parameters.map(para => ({
+            name: para,
+            title: uppercaseFirstLetterString(para),
+          }))}
         >
           <SearchState />
           <PagingState defaultCurrentPage={0} defaultPageSize={5} />
@@ -67,14 +86,7 @@ const Schedule = props => {
             order={columnOrder}
             onOrderChange={setColumnOrder}
           />
-          <TableColumnResizing
-            defaultColumnWidths={parameters.map(para => ({
-              columnName: para,
-              width: 100,
-            }))}
-            columnWidths={columnWidths}
-            onColumnWidthsChange={setColumnWidths}
-          />
+
           <TableHeaderRow />
           <Toolbar />
           <PagingPanel pageSizes={pageSizes} />
@@ -91,6 +103,7 @@ Schedule.propTypes = {
   parameters: PropTypes.array.isRequired,
   revitElements: PropTypes.array.isRequired,
   paramCategories: PropTypes.array.isRequired,
+  schedule: PropTypes.object,
 };
 
 const mapStateToProps = state => {
@@ -99,6 +112,7 @@ const mapStateToProps = state => {
     revitElements: state.schedule.revitElements,
     parameters: state.schedule.parameters,
     paramCategories: state.schedule.paramCategories,
+    schedule: state.schedule.schedule,
   };
 };
 

@@ -23,6 +23,12 @@ export const PUBLIC_ROUTES = [
 
 export const PRIVATE_ROUTES = [
   {
+    name: 'CreateScheduleForm',
+    path: '/project/:projectId/schedule/create',
+    exact: true,
+    component: CreateScheduleForm,
+  },
+  {
     name: 'Schedules',
     path: '/project/:projectId',
     exact: true,
@@ -45,12 +51,6 @@ export const PRIVATE_ROUTES = [
     path: '/schedule',
     exact: true,
     component: Schedules,
-  },
-  {
-    name: 'Schedule',
-    path: '/project/:projectId/schedule/create',
-    exact: true,
-    component: CreateScheduleForm,
   },
 ];
 

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
@@ -29,9 +29,25 @@ import {
   Step,
   StepLabel,
   FormControl,
-  TextField,
 } from '@material-ui/core';
+import Board from '@lourenci/react-kanban';
+
 import styles from './styles';
+
+const initialBoard = {
+  lanes: [
+    {
+      id: 1,
+      title: 'All parameters',
+      cards: [],
+    },
+    {
+      id: 2,
+      title: 'Selected parameters',
+      cards: [],
+    },
+  ],
+};
 
 const CreateScheduleForm = props => {
   const {
@@ -46,11 +62,11 @@ const CreateScheduleForm = props => {
   useEffect(() => {
     fetchCatAndParam(projectId);
   }, [fetchCatAndParam]);
-
+  const [board, setBoard] = useState(initialBoard);
   const [items, setItems] = React.useState([]);
   const [nameSchedule, setNameSchedule] = React.useState();
   const [selectedCategory, setSelectedCategory] = React.useState([]);
-  const [selectedParameter, setSelectedParameter] = React.useState([]);
+  const [selectedparameter, setSelectedParameter] = React.useState([]);
   const [left, setLeft] = React.useState([]);
   const [activeStep, setActiveStep] = React.useState(0);
 
@@ -73,12 +89,32 @@ const CreateScheduleForm = props => {
     });
 
     const parameterList = [].concat(...para1);
+
     setLeft([...new Set(parameterList)]);
+    const newBoard = {
+      lanes: [
+        {
+          id: 1,
+          title: 'All parameters',
+          cards: [...new Set(parameterList)].map((item, i) => ({
+            id: i,
+            title: item,
+          })),
+        },
+        {
+          id: 2,
+          title: 'Selected parameters',
+          cards: [],
+        },
+      ],
+    };
+
+    setBoard(newBoard);
   };
 
   const handleToggle = value => () => {
-    const currentIndex = selectedParameter.indexOf(value);
-    const newChecked = [...selectedParameter];
+    const currentIndex = selectedparameter.indexOf(value);
+    const newChecked = [...selectedparameter];
 
     if (currentIndex === -1) {
       newChecked.push(value);
@@ -90,13 +126,13 @@ const CreateScheduleForm = props => {
   };
 
   const numberOfChecked = items =>
-    intersection(selectedParameter, items).length;
+    intersection(selectedparameter, items).length;
 
   const handleToggleAll = items => () => {
     if (numberOfChecked(items) === items.length) {
-      setSelectedParameter(not(selectedParameter, items));
+      setSelectedParameter(not(selectedparameter, items));
     } else {
-      setSelectedParameter(union(selectedParameter, items));
+      setSelectedParameter(union(selectedparameter, items));
     }
   };
 
@@ -135,7 +171,7 @@ const CreateScheduleForm = props => {
             >
               <ListItemIcon>
                 <Checkbox
-                  checked={selectedParameter.indexOf(value) !== -1}
+                  checked={selectedparameter.indexOf(value) !== -1}
                   tabIndex={-1}
                   disableRipple
                   inputProps={{ 'aria-labelledby': labelId }}
@@ -206,19 +242,32 @@ const CreateScheduleForm = props => {
             alignItems="center"
             className={classes.rootStep2}
           >
-            <Grid item>{customList('Parameters', left)}</Grid>
+            {' '}
+            <div style={{ display: 'flex' }}>
+              {/* <Grid item>{customList('Parameters', left)}</Grid> */}
+              <Board
+                allowRemoveLane
+                allowRenameLane
+                onLaneRemove={console.log('LaneRemove')}
+                onCardRemove={console.log('onCardRemove')}
+                onLaneRename={console.log('onLaneRename')}
+                initialBoard={board}
+              />
+            </div>
           </Grid>
         );
       case 2:
         return (
-          <Grid container classes={{ flexGrow: '1' }} spacing={2}>
-            <Grid item xs={6}>
-              {customSelectedList('Selected categories', selectedCategory)}
+          <div>
+            <Grid container classes={{ flexGrow: '1' }} spacing={2}>
+              <Grid item xs={6}>
+                {customSelectedList('Selected categories', selectedCategory)}
+              </Grid>
+              <Grid item xs={6}>
+                {customSelectedList('Selected parameters', selectedparameter)}
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              {customSelectedList('Selected parameters', selectedParameter)}
-            </Grid>
-          </Grid>
+          </div>
         );
       default:
         return 'unknown step';
@@ -232,7 +281,7 @@ const CreateScheduleForm = props => {
         projectId,
         nameSchedule,
         selectedCategory.join(','),
-        selectedParameter.join(','),
+        selectedparameter.join(','),
       );
     }
   };
@@ -293,12 +342,14 @@ CreateScheduleForm.propTypes = {
   paramCategories: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   createSchedule: PropTypes.func.isRequired,
+  board: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
     paramCategories: state.schedule.paramCategories,
     loading: state.schedule.loading,
+    board: state.schedule.board,
   };
 };
 
@@ -322,3 +373,18 @@ function union(a, b) {
 function getSteps() {
   return ['Select categories', 'Select parameters', 'Create a schedule'];
 }
+
+// const board = {
+//   lanes: [
+//     {
+//       id: 1,
+//       title: 'All parameters',
+//       cards: [].concat.apply([], card),
+//     },
+//     {
+//       id: 2,
+//       title: 'Doing',
+//       cards: [],
+//     },
+//   ],
+// };
