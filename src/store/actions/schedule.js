@@ -12,6 +12,9 @@ import {
   FETCH_REVITELEMENT_FAIL,
   FETCH_REVITELEMENT_START,
   FETCH_REVITELEMENT_SUCCESS,
+  FETCH_PARAMCATSCHE_FAIL,
+  FETCH_PARAMCATSCHE_SUCCESS,
+  FETCH_PARAMCATSCHE_START,
 } from './types';
 
 import { API_ENDPOINT } from '../../constants';
@@ -143,19 +146,39 @@ export const getSchedule = (projectId, scheduleId) => async dispatch => {
         category: res.data.data.categories.join(','),
       };
 
-      const res1 = await axios.get(
+      const resRvtElement = await axios.get(
         `${API_ENDPOINT}/project/${projectId}/elements`,
         {
           params,
         },
       );
 
-      const revitElements = res1.data.data.map(item =>
+      const revitElements = resRvtElement.data.data.map(item =>
         serializeRevitElement(item),
       );
       dispatch({ type: FETCH_REVITELEMENT_SUCCESS, payload: revitElements });
     } catch (error) {
       dispatch({ type: FETCH_REVITELEMENT_FAIL, payload: error });
+    }
+
+    try {
+      dispatch({ type: FETCH_PARAMCATSCHE_START });
+      const params = {
+        category: res.data.data.categories.join(','),
+      };
+      const resAllParamCat = await axios.get(
+        `${API_ENDPOINT}/project/${projectId}/parametersofcategory`,
+        {
+          params,
+        },
+      );
+
+      dispatch({
+        type: FETCH_PARAMCATSCHE_SUCCESS,
+        payload: resAllParamCat.data.data,
+      });
+    } catch (error) {
+      dispatch({ type: FETCH_PARAMCATSCHE_FAIL, payload: error });
     }
   } catch (error) {
     dispatch({

@@ -8,6 +8,9 @@ import {
   SCHEDULE_FETCHED_FAIL,
   SCHEDULE_FETCHED_SUCCESS,
   SCHEDULE_FETCHED_START,
+  FETCH_PARAMCATSCHE_FAIL,
+  FETCH_PARAMCATSCHE_SUCCESS,
+  FETCH_PARAMCATSCHE_START,
 } from '../actions/types';
 
 const initialState = {
@@ -25,6 +28,7 @@ export default function(state = initialState, action) {
     case FETCH_REVITELEMENT_START:
     case FETCH_PARAMETERCATEGORY_START:
     case SCHEDULE_FETCHED_START:
+    case FETCH_PARAMCATSCHE_START:
       return {
         ...state,
         loading: true,
@@ -50,9 +54,16 @@ export default function(state = initialState, action) {
         schedule: payload,
         parameters: payload.parameters,
       };
+    case FETCH_PARAMCATSCHE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        paramCategories: payload,
+      };
     case FETCH_PARAMETERCATEGORY_FAIL:
     case FETCH_REVITELEMENT_FAIL:
     case SCHEDULE_FETCHED_FAIL:
+    case FETCH_PARAMCATSCHE_FAIL:
       return {
         ...state,
         loading: false,
