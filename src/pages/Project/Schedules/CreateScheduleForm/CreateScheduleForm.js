@@ -5,11 +5,8 @@ import { useParams } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-cycle
-import {
-  fetchCatAndParam,
-  createSchedule,
-} from '../../../../store/actions/schedule';
-
+import { fetchCatAndParam } from '../../../../store/actions/schedule';
+import { createSchedule } from '../../../../store/actions/project';
 import Spinner from '../../../../components/UI/Spinner/Spinner';
 import {
   Checkbox,
@@ -29,6 +26,7 @@ import {
   Step,
   StepLabel,
   FormControl,
+  TextField,
 } from '@material-ui/core';
 import Board from '@lourenci/react-kanban';
 
@@ -57,7 +55,9 @@ const CreateScheduleForm = props => {
     classes,
     createSchedule,
   } = props;
-  const { projectId } = useParams();
+  const { projectId, scheduleId } = useParams();
+  let textBtnFinish = 'Create';
+  if (scheduleId) textBtnFinish = 'Update';
 
   useEffect(() => {
     fetchCatAndParam(projectId);
@@ -69,6 +69,7 @@ const CreateScheduleForm = props => {
   const [selectedparameter, setSelectedParameter] = React.useState([]);
   const [left, setLeft] = React.useState([]);
   const [activeStep, setActiveStep] = React.useState(0);
+  const [scheduleName, setScheduleName] = useState(null);
 
   const handleChange = category => event => {
     let checkedCategory;
@@ -111,7 +112,9 @@ const CreateScheduleForm = props => {
 
     setBoard(newBoard);
   };
-
+  const nameScheduleHandle = e => {
+    setNameSchedule(e.target.value);
+  };
   const handleToggle = value => () => {
     const currentIndex = selectedparameter.indexOf(value);
     const newChecked = [...selectedparameter];
@@ -226,14 +229,23 @@ const CreateScheduleForm = props => {
     });
   }
   const getNumberOfSteps = () => {
-    return 3;
+    return 4;
   };
   const steps = getSteps();
   const getStepContent = step => {
     switch (step) {
       case 0:
-        return step1;
+        return (
+          <TextField
+            id="standard-basic"
+            label="Standard"
+            onChange={e => nameScheduleHandle(e)}
+          />
+        );
+
       case 1:
+        return step1;
+      case 2:
         return (
           <Grid
             container
@@ -244,7 +256,7 @@ const CreateScheduleForm = props => {
           >
             {' '}
             <div style={{ display: 'flex' }}>
-              {/* <Grid item>{customList('Parameters', left)}</Grid> */}
+              <Grid item>{customList('Parameters', left)}</Grid>
               <Board
                 allowRemoveLane
                 allowRenameLane
@@ -256,9 +268,10 @@ const CreateScheduleForm = props => {
             </div>
           </Grid>
         );
-      case 2:
+      case 3:
         return (
           <div>
+            <p>{nameSchedule}</p>
             <Grid container classes={{ flexGrow: '1' }} spacing={2}>
               <Grid item xs={6}>
                 {customSelectedList('Selected categories', selectedCategory)}
@@ -276,7 +289,8 @@ const CreateScheduleForm = props => {
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
-    if (activeStep === getNumberOfSteps()) {
+
+    if (activeStep === getNumberOfSteps() - 1) {
       createSchedule(
         projectId,
         nameSchedule,
@@ -305,7 +319,11 @@ const CreateScheduleForm = props => {
             <Typography className={classes.instructions}>
               All steps completed - you&quot;re finished
             </Typography>
-            <Button onClick={handleReset} className={classes.button}>
+            <Button
+              size="small"
+              onClick={handleReset}
+              className={classes.button}
+            >
               Create a new schedule?
             </Button>
           </div>
@@ -313,6 +331,7 @@ const CreateScheduleForm = props => {
           <div>
             <div>
               <Button
+                size="small"
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 className={classes.button}
@@ -320,12 +339,13 @@ const CreateScheduleForm = props => {
                 Back
               </Button>
               <Button
+                size="small"
                 variant="contained"
                 color="primary"
                 onClick={handleNext}
                 className={classes.button}
               >
-                {activeStep === getNumberOfSteps() - 1 ? 'Finish' : 'Next'}
+                {activeStep === getNumberOfSteps() - 1 ? textBtnFinish : 'Next'}
               </Button>
               <div> {getStepContent(activeStep)} </div>
             </div>
@@ -342,14 +362,12 @@ CreateScheduleForm.propTypes = {
   paramCategories: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   createSchedule: PropTypes.func.isRequired,
-  board: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
     paramCategories: state.schedule.paramCategories,
     loading: state.schedule.loading,
-    board: state.schedule.board,
   };
 };
 
@@ -373,18 +391,3 @@ function union(a, b) {
 function getSteps() {
   return ['Select categories', 'Select parameters', 'Create a schedule'];
 }
-
-// const board = {
-//   lanes: [
-//     {
-//       id: 1,
-//       title: 'All parameters',
-//       cards: [].concat.apply([], card),
-//     },
-//     {
-//       id: 2,
-//       title: 'Doing',
-//       cards: [],
-//     },
-//   ],
-// };

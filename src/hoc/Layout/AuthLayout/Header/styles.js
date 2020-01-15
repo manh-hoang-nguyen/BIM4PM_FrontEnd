@@ -12,7 +12,6 @@ export const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
-    textDecoration: 'none',
     color: 'white',
   },
   search: {

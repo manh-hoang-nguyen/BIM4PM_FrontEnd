@@ -10,9 +10,6 @@ import {
   IntegratedPaging,
   SearchState,
   IntegratedFiltering,
-  ColumnChooser,
-  TableColumnVisibility,
-  TableColumnResizing,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -24,6 +21,7 @@ import {
   DragDropProvider,
   TableColumnReordering,
 } from '@devexpress/dx-react-grid-material-ui';
+ 
 import Spinner from '../../../../components/UI/Spinner/Spinner';
 import { getSchedule } from '../../../../store/actions/schedule';
 import uppercaseFirstLetterString from '../../../../utils/uppercaseFirstLetterString';
@@ -62,7 +60,16 @@ const Schedule = props => {
             Modify
           </Button>
         </Link>
-        <ExportExcel csvData={revitElements} fileName={schedule.name} />
+        <ExportExcel
+          csvData={revitElements.map(el => {
+            const object = {};
+            parameters.forEach(para => {
+              object[para] = el[para];
+            });
+            return object;
+          })}
+          fileName={schedule.name}
+        />
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', margin: '3px' }}>
         <Typography variant="h5">{schedule.name}</Typography>

@@ -3,19 +3,15 @@ import {
   FETCH_PARAMETERCATEGORY_FAIL,
   FETCH_PARAMETERCATEGORY_START,
   FETCH_PARAMETERCATEGORY_SUCCESS,
-  SCHEDULE_CREATED_FAIL,
-  SCHEDULE_CREATED_START,
-  SCHEDULE_CREATED_SUCCESS,
   SCHEDULE_FETCHED_FAIL,
   SCHEDULE_FETCHED_START,
   SCHEDULE_FETCHED_SUCCESS,
   FETCH_REVITELEMENT_FAIL,
   FETCH_REVITELEMENT_START,
   FETCH_REVITELEMENT_SUCCESS,
-  FETCH_PARAMCATSCHE_FAIL,
-  FETCH_PARAMCATSCHE_SUCCESS,
-  FETCH_PARAMCATSCHE_START,
-  BOARD_SUCCESS,
+  SCHEDULE_UPDATED_START,
+  SCHEDULE_UPDATED_SUCCESS,
+  SCHEDULE_UPDATED_FAIL,
 } from './types';
 
 import { API_ENDPOINT } from '../../constants';
@@ -88,42 +84,6 @@ export const fetchProjects = projectId => async dispatch => {
     dispatch({
       type: FETCH_PARAMETERCATEGORY_FAIL,
       payload: err,
-    });
-  }
-};
-
-export const createSchedule = (
-  projectId,
-  name,
-  categories,
-  parameters,
-) => async dispatch => {
-  try {
-    dispatch({
-      type: SCHEDULE_CREATED_START,
-    });
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
-    const body = JSON.stringify({ name, categories, parameters });
-
-    const res = await axios.post(
-      `/project/${projectId}/schedules`,
-      body,
-      config,
-    );
-    dispatch({
-      type: SCHEDULE_CREATED_SUCCESS,
-      payload: res.data,
-    });
-  } catch (error) {
-    dispatch({
-      type: SCHEDULE_CREATED_FAIL,
-      payload: error,
     });
   }
 };

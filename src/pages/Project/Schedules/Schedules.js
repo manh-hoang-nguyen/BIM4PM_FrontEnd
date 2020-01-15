@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { useParams, Link, useLocation } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Button } from '@material-ui/core';
 import styles from './styles';
 
 import uppercaseFirstLetter from '../../../utils/uppercaseFirstLetterString';
@@ -28,12 +28,18 @@ const Schedules = props => {
 
   return (
     <div>
-      <div>
-        <Link to={`${location.pathname}/schedule/create`}>
-          Create Schedules
+      <div style={{ margin: 3 }}>
+        <Link
+          to={`${location.pathname}/schedule/create`}
+          style={{ textDecoration: 'none' }}
+        >
+          <Button variant="outlined" color="primary" size="small">
+            Create new schedule
+          </Button>
         </Link>
       </div>
       <div>
+        <p>List Schedules</p>
         {schedules.map(schedule => (
           <div key={schedule._id}>
             <Link to={`${location.pathname}/schedule/${schedule._id}`}>

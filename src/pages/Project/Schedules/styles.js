@@ -14,6 +14,9 @@ const styles = theme => ({
     padding: theme.spacing(2, 4, 3),
     margin: 5,
   },
+  listSchedules: {
+    diplay: 'block',
+  },
 });
 
 export default styles;
