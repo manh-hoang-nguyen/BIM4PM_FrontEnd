@@ -27,6 +27,7 @@ import {
 import Spinner from '../../../../components/UI/Spinner/Spinner';
 import { getSchedule } from '../../../../store/actions/schedule';
 import uppercaseFirstLetterString from '../../../../utils/uppercaseFirstLetterString';
+import ExportExcel from '../../../../utils/exportExcel';
 
 const Schedule = props => {
   const {
@@ -61,6 +62,7 @@ const Schedule = props => {
             Modify
           </Button>
         </Link>
+        <ExportExcel csvData={revitElements} fileName={schedule.name} />
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', margin: '3px' }}>
         <Typography variant="h5">{schedule.name}</Typography>
