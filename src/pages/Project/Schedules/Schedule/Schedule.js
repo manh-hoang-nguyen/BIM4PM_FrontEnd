@@ -9,8 +9,8 @@ import MaterialTable from 'material-table';
 
 import Spinner from '../../../../components/UI/Spinner/Spinner';
 import { getSchedule } from '../../../../store/actions/schedule';
-import uppercaseFirstLetterString from '../../../../utils/uppercaseFirstLetterString';
-import ExportExcel, { ExportExcel2 } from '../../../../utils/exportExcel';
+
+import ExportExcel from '../../../../utils/exportExcel';
 
 const Schedule = props => {
   const { loading, getSchedule, parameters, revitElements, schedule } = props;

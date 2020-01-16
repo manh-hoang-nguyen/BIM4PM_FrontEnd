@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../axiosService';
 import {
   FETCH_PARAMETERCATEGORY_FAIL,
   FETCH_PARAMETERCATEGORY_START,
@@ -9,9 +9,7 @@ import {
   FETCH_REVITELEMENT_FAIL,
   FETCH_REVITELEMENT_START,
   FETCH_REVITELEMENT_SUCCESS,
-  SCHEDULE_UPDATED_START,
-  SCHEDULE_UPDATED_SUCCESS,
-  SCHEDULE_UPDATED_FAIL,
+   
 } from './types';
 
 import { API_ENDPOINT } from '../../constants';

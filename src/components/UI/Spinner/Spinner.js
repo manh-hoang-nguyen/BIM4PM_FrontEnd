@@ -7,9 +7,10 @@ const override = css`
   margin: 0 auto;
   border-color: red;
 `;
-const Spinner = () => {
+const Spinner = props => {
   return (
     <SyncLoader
+      {...props}
       css={override}
       size={10}
       // size={"150px"} this also works

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../axiosService';
 
 import { setAlert } from './alert';
 import {
@@ -70,7 +70,9 @@ export const login = (email, password) => async dispatch => {
 
   try {
     dispatch({ type: LOGIN_START });
+
     const res = await axios.post(`/api/v1/auth/login`, body, config);
+
     setAuthToken(res.data.token);
 
     dispatch({

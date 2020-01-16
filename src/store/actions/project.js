@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../axiosService';
 import { API_ENDPOINT } from '../../constants/index';
 import {
   PROJECT_CREATED_SUCCESS,
@@ -87,9 +87,10 @@ export const createSchedule = (projectId, name) => async dispatch => {
       body,
       config,
     );
+     
     dispatch({
       type: SCHEDULE_CREATED_SUCCESS,
-      payload: res.data,
+      payload: res.data.data,
     });
   } catch (error) {
     dispatch({

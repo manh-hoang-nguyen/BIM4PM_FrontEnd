@@ -26,7 +26,6 @@ import {
   Step,
   StepLabel,
   FormControl,
-  TextField,
 } from '@material-ui/core';
 
 import styles from './styles';
@@ -38,6 +37,7 @@ const CreateScheduleForm = props => {
     loading,
     classes,
     createSchedule,
+    schedule,
   } = props;
   const { projectId, scheduleId } = useParams();
   let textBtnFinish = 'Create';
@@ -47,13 +47,23 @@ const CreateScheduleForm = props => {
     fetchCatAndParam(projectId);
   }, [fetchCatAndParam]);
 
-  const [items, setItems] = React.useState([]);
-  const [nameSchedule, setNameSchedule] = React.useState();
-  const [selectedCategory, setSelectedCategory] = React.useState([]);
-  const [selectedparameter, setSelectedParameter] = React.useState([]);
-  const [left, setLeft] = React.useState([]);
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [scheduleName, setScheduleName] = useState(null);
+  const [items, setItems] = useState([]);
+  const [nameSchedule, setNameSchedule] = useState();
+  const [selectedCategory, setSelectedCategory] = useState(schedule.categories);
+  const [selectedparameter, setSelectedParameter] = useState(
+    schedule.parameters,
+  );
+
+  const [left, setLeft] = useState(
+    paramCategories
+      .filter(e => schedule.categories.includes(e.category))
+      .map(item => item.parameters)
+      .reduce((accumulator, currentValue, currentIndex, array) => {
+        return accumulator.concat(currentValue);
+      }, []),
+  );
+
+  const [activeStep, setActiveStep] = useState(0);
 
   const handleChange = category => event => {
     let checkedCategory;
@@ -77,9 +87,14 @@ const CreateScheduleForm = props => {
 
     setLeft([...new Set(parameterList)]);
   };
-  const nameScheduleHandle = e => {
-    setNameSchedule(e.target.value);
-  };
+  console.log(
+    paramCategories
+      .filter(e => schedule.categories.includes(e.category))
+      .map(item => item.parameters)
+      .reduce((accumulator, currentValue, currentIndex, array) => {
+        return accumulator.concat(currentValue);
+      }, []),
+  );
   const handleToggle = value => () => {
     const currentIndex = selectedparameter.indexOf(value);
     const newChecked = [...selectedparameter];
@@ -246,6 +261,8 @@ const CreateScheduleForm = props => {
         selectedparameter.join(','),
       );
     }
+    if (activeStep === getNumberOfSteps() - 3) {
+    }
   };
 
   const handleBack = () => setActiveStep(activeStep - 1);
@@ -310,12 +327,14 @@ CreateScheduleForm.propTypes = {
   paramCategories: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   createSchedule: PropTypes.func.isRequired,
+  schedule: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
     paramCategories: state.schedule.paramCategories,
     loading: state.schedule.loading,
+    schedule: state.schedule.schedule,
   };
 };
 

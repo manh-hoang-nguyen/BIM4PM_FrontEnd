@@ -65,6 +65,7 @@ const Home = props => {
   if (error !== null) fetchedProjects = <p> Projects can not be loaded</p>;
 
   if (error === null && !loading) {
+     
     fetchedProjects = projects.map(project => (
       <ProjectItem
         link={`/project/${project._id}`}
