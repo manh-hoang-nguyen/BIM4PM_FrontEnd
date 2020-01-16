@@ -3,45 +3,19 @@ import { connect } from 'react-redux';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { Paper, Typography, Button } from '@material-ui/core';
+import { Paper, Button } from '@material-ui/core';
 
-import {
-  PagingState,
-  IntegratedPaging,
-  SearchState,
-  IntegratedFiltering,
-} from '@devexpress/dx-react-grid';
-import {
-  Grid,
-  Table as TableGrid,
-  TableHeaderRow,
-  PagingPanel,
-  SearchPanel,
-  Toolbar,
-  DragDropProvider,
-  TableColumnReordering,
-} from '@devexpress/dx-react-grid-material-ui';
- 
+import MaterialTable from 'material-table';
+
 import Spinner from '../../../../components/UI/Spinner/Spinner';
 import { getSchedule } from '../../../../store/actions/schedule';
 import uppercaseFirstLetterString from '../../../../utils/uppercaseFirstLetterString';
-import ExportExcel from '../../../../utils/exportExcel';
+import ExportExcel, { ExportExcel2 } from '../../../../utils/exportExcel';
 
 const Schedule = props => {
-  const {
-    loading,
-    getSchedule,
-    parameters,
-    revitElements,
-    paramCategories,
-    schedule,
-  } = props;
+  const { loading, getSchedule, parameters, revitElements, schedule } = props;
   const { projectId, scheduleId } = useParams();
 
-  const [pageSizes] = React.useState([5, 10, 15, 0]);
-  const [columnOrder, setColumnOrder] = React.useState();
-  const [hiddenColumnNames, setHiddenColumnNames] = useState([]);
-  const [columnWidths, setColumnWidths] = useState();
   const location = useLocation();
   useEffect(() => {
     getSchedule(projectId, scheduleId);
@@ -71,36 +45,25 @@ const Schedule = props => {
           fileName={schedule.name}
         />
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', margin: '3px' }}>
-        <Typography variant="h5">{schedule.name}</Typography>
-      </div>
 
       <Paper>
-        <Grid
-          rows={revitElements}
+        <MaterialTable
+          title={schedule.name}
           columns={parameters.map(para => ({
-            name: para,
-            title: uppercaseFirstLetterString(para),
+            title: para,
+            field: para,
           }))}
-        >
-          <SearchState />
-          <PagingState defaultCurrentPage={0} defaultPageSize={5} />
-          <IntegratedPaging />
-          <IntegratedFiltering />
-          <DragDropProvider />
-          <TableGrid />
-
-          <TableColumnReordering
-            defaultOrder={parameters}
-            order={columnOrder}
-            onOrderChange={setColumnOrder}
-          />
-
-          <TableHeaderRow />
-          <Toolbar />
-          <PagingPanel pageSizes={pageSizes} />
-          <SearchPanel />
-        </Grid>
+          data={revitElements}
+          options={{
+            search: true,
+            filtering: true,
+            sorting: true,
+            grouping: true,
+            exportButton: true,
+            pageSize: 5,
+            pageSizeOptions: [10, 20, 50],
+          }}
+        />
       </Paper>
     </div>
   );

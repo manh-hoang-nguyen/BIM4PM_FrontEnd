@@ -68,12 +68,7 @@ export const getSchedules = projectId => async dispatch => {
   }
 };
 
-export const createSchedule = (
-  projectId,
-  name,
-  categories,
-  parameters,
-) => async dispatch => {
+export const createSchedule = (projectId, name) => async dispatch => {
   try {
     dispatch({
       type: SCHEDULE_CREATED_START,
@@ -85,10 +80,10 @@ export const createSchedule = (
       },
     };
 
-    const body = JSON.stringify({ name, categories, parameters });
+    const body = JSON.stringify({ name });
 
     const res = await axios.post(
-      `/project/${projectId}/schedules`,
+      `${API_ENDPOINT}/project/${projectId}/schedules`,
       body,
       config,
     );

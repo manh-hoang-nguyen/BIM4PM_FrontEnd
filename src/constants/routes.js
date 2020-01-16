@@ -5,6 +5,7 @@ import Home from '../pages/Home/Home';
 import Schedules from '../pages/Project/Schedules/Schedules';
 import CreateScheduleForm from '../pages/Project/Schedules/CreateScheduleForm/CreateScheduleForm';
 import Schedule from '../pages/Project/Schedules/Schedule/Schedule';
+import ModifyScheduleForm from '../pages/Project/Schedules/Schedule/ModifyScheduleForm/ModifyScheduleForm';
 
 export const PUBLIC_ROUTES = [
   {
@@ -32,7 +33,7 @@ export const PRIVATE_ROUTES = [
     name: 'CreateScheduleForm',
     path: '/project/:projectId/schedule/:scheduleId/modify',
     exact: true,
-    component: CreateScheduleForm,
+    component: ModifyScheduleForm,
   },
   {
     name: 'Schedules',
