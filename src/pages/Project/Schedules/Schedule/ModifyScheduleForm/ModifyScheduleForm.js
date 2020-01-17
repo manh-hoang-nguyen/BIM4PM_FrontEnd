@@ -29,6 +29,7 @@ import {
 } from '@material-ui/core';
 
 import styles from './styles';
+import SelectCategory from './SelectCategory';
 
 const CreateScheduleForm = props => {
   const {
@@ -264,6 +265,7 @@ const CreateScheduleForm = props => {
 
   return (
     <div className={classes.root}>
+      <SelectCategory />
       <Stepper alternativeLabel activeStep={activeStep}>
         {steps.map(label => (
           <Step key={label}>

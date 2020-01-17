@@ -7,20 +7,16 @@ import { categoriesSelected } from '../../../../../store/actions/schedule';
 
 const SelectCategory = props => {
   const { schedule, paramCategories, categoriesSelected } = props;
-  const [items, setItems] = useState([]);
-  useEffect(() => {
-    categoriesSelected(items);
-  }, [items]);
-  const handleChange = category => event => {
-    let checkedCategory;
 
+  const [selectedCategory, setSelectedCategory] = useState(schedule.categories);
+
+  const handleChange = category => event => {
     if (event.target.checked) {
-      checkedCategory = paramCategories.filter(e => e.category === category);
-      setItems([...items, checkedCategory[0]]);
+      setSelectedCategory([...selectedCategory, category]);
     } else {
-      checkedCategory = items.filter(e => e.category !== category);
-      setItems(checkedCategory);
+      setSelectedCategory(selectedCategory.filter(e => e !== category));
     }
+    categoriesSelected(selectedCategory);
   };
   return (
     <>
