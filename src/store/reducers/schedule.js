@@ -17,6 +17,8 @@ const initialState = {
   revitElements: [],
   paramCategories: [],
   parameters: [],
+  selectedCategories: [],
+  selectedParameters: [],
 };
 export default function(state = initialState, action) {
   const { type, payload } = action;

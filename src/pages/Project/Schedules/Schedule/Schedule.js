@@ -3,11 +3,12 @@ import { connect } from 'react-redux';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { Paper, Button } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 
 import MaterialTable from 'material-table';
 
 import Spinner from '../../../../components/UI/Spinner/Spinner';
+import Button from '../../../../components/UI/Button/Button';
 import { getSchedule } from '../../../../store/actions/schedule';
 
 import ExportExcel from '../../../../utils/exportExcel';
@@ -30,9 +31,7 @@ const Schedule = props => {
           to={`${location.pathname}/modify`}
           style={{ textDecoration: 'none' }}
         >
-          <Button size="small" variant="outlined" color="primary">
-            Modify
-          </Button>
+          <Button>Modify</Button>
         </Link>
         <ExportExcel
           csvData={revitElements.map(el => {
@@ -61,7 +60,7 @@ const Schedule = props => {
             grouping: true,
             exportButton: true,
             pageSize: 5,
-            pageSizeOptions: [10, 20, 50],
+            pageSizeOptions: [5, 10, 20, 50],
           }}
         />
       </Paper>
@@ -74,7 +73,6 @@ Schedule.propTypes = {
   getSchedule: PropTypes.func.isRequired,
   parameters: PropTypes.array.isRequired,
   revitElements: PropTypes.array.isRequired,
-  paramCategories: PropTypes.array.isRequired,
   schedule: PropTypes.object,
 };
 
@@ -83,7 +81,6 @@ const mapStateToProps = state => {
     loading: state.schedule.loading,
     revitElements: state.schedule.revitElements,
     parameters: state.schedule.parameters,
-    paramCategories: state.schedule.paramCategories,
     schedule: state.schedule.schedule,
   };
 };

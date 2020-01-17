@@ -9,7 +9,8 @@ import {
   FETCH_REVITELEMENT_FAIL,
   FETCH_REVITELEMENT_START,
   FETCH_REVITELEMENT_SUCCESS,
-   
+  CATEGORIES_SELECTED,
+  PARAMETERS_SELECTED,
 } from './types';
 
 import { API_ENDPOINT } from '../../constants';
@@ -125,4 +126,18 @@ export const getSchedule = (projectId, scheduleId) => async dispatch => {
       payload: error,
     });
   }
+};
+
+export const categoriesSelected = categories => dispatch => {
+  dispatch({
+    type: CATEGORIES_SELECTED,
+    payload: categories,
+  });
+};
+
+export const parametersSelected = parameters => dispatch => {
+  dispatch({
+    type: PARAMETERS_SELECTED,
+    payload: parameters,
+  });
 };

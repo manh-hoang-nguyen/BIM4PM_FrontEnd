@@ -42,26 +42,28 @@ const CreateScheduleForm = props => {
   const { projectId, scheduleId } = useParams();
   let textBtnFinish = 'Create';
   if (scheduleId) textBtnFinish = 'Update';
-
-  useEffect(() => {
-    fetchCatAndParam(projectId);
-  }, [fetchCatAndParam]);
-
   const [items, setItems] = useState([]);
   const [nameSchedule, setNameSchedule] = useState();
   const [selectedCategory, setSelectedCategory] = useState(schedule.categories);
-  const [selectedparameter, setSelectedParameter] = useState(
-    schedule.parameters,
-  );
+  const [selectedPara, setSelectedPara] = useState(schedule.parameters);
+  const [parameterList, setParameterList] = useState([]);
 
-  const [left, setLeft] = useState(
-    paramCategories
-      .filter(e => schedule.categories.includes(e.category))
-      .map(item => item.parameters)
-      .reduce((accumulator, currentValue, currentIndex, array) => {
-        return accumulator.concat(currentValue);
-      }, []),
-  );
+  useEffect(() => {
+    fetchCatAndParam(projectId);
+    setParameterList([
+      ...new Set(
+        // eslint-disable-next-line prefer-spread
+        [].concat
+          .apply(
+            [],
+            paramCategories
+              .filter(e => schedule.categories.includes(e.category))
+              .map(item => item.parameters),
+          )
+          .map(item => item.name),
+      ),
+    ]);
+  }, [fetchCatAndParam]);
 
   const [activeStep, setActiveStep] = useState(0);
 
@@ -85,19 +87,12 @@ const CreateScheduleForm = props => {
 
     const parameterList = [].concat(...para1);
 
-    setLeft([...new Set(parameterList)]);
+    setParameterList([...new Set(parameterList)]);
   };
-  console.log(
-    paramCategories
-      .filter(e => schedule.categories.includes(e.category))
-      .map(item => item.parameters)
-      .reduce((accumulator, currentValue, currentIndex, array) => {
-        return accumulator.concat(currentValue);
-      }, []),
-  );
+
   const handleToggle = value => () => {
-    const currentIndex = selectedparameter.indexOf(value);
-    const newChecked = [...selectedparameter];
+    const currentIndex = selectedPara.indexOf(value);
+    const newChecked = [...selectedPara];
 
     if (currentIndex === -1) {
       newChecked.push(value);
@@ -105,17 +100,16 @@ const CreateScheduleForm = props => {
       newChecked.splice(currentIndex, 1);
     }
 
-    setSelectedParameter(newChecked);
+    setSelectedPara(newChecked);
   };
 
-  const numberOfChecked = items =>
-    intersection(selectedparameter, items).length;
+  const numberOfChecked = items => intersection(selectedPara, items).length;
 
   const handleToggleAll = items => () => {
     if (numberOfChecked(items) === items.length) {
-      setSelectedParameter(not(selectedparameter, items));
+      setSelectedPara(not(selectedPara, items));
     } else {
-      setSelectedParameter(union(selectedparameter, items));
+      setSelectedPara(union(selectedPara, items));
     }
   };
 
@@ -126,7 +120,7 @@ const CreateScheduleForm = props => {
         avatar={
           <Checkbox
             onClick={handleToggleAll(items)}
-            selectedParameter={
+            selectedPara={
               numberOfChecked(items) === items.length && items.length !== 0
             }
             indeterminate={
@@ -154,7 +148,7 @@ const CreateScheduleForm = props => {
             >
               <ListItemIcon>
                 <Checkbox
-                  checked={selectedparameter.indexOf(value) !== -1}
+                  checked={selectedPara.indexOf(value) !== -1}
                   tabIndex={-1}
                   disableRipple
                   inputProps={{ 'aria-labelledby': labelId }}
@@ -212,6 +206,7 @@ const CreateScheduleForm = props => {
     return 3;
   };
   const steps = getSteps();
+
   const getStepContent = step => {
     switch (step) {
       case 0:
@@ -227,7 +222,7 @@ const CreateScheduleForm = props => {
           >
             {' '}
             <div style={{ display: 'flex' }}>
-              <Grid item>{customList('Parameters', left)}</Grid>
+              <Grid item>{customList('Parameters', parameterList)}</Grid>
             </div>
           </Grid>
         );
@@ -240,7 +235,7 @@ const CreateScheduleForm = props => {
                 {customSelectedList('Selected categories', selectedCategory)}
               </Grid>
               <Grid item xs={6}>
-                {customSelectedList('Selected parameters', selectedparameter)}
+                {customSelectedList('Selected parameters', selectedPara)}
               </Grid>
             </Grid>
           </div>
@@ -258,10 +253,8 @@ const CreateScheduleForm = props => {
         projectId,
         nameSchedule,
         selectedCategory.join(','),
-        selectedparameter.join(','),
+        selectedPara.join(','),
       );
-    }
-    if (activeStep === getNumberOfSteps() - 3) {
     }
   };
 
@@ -317,6 +310,9 @@ const CreateScheduleForm = props => {
           </div>
         )}
       </div>
+      {parameterList.map(item => (
+        <p key={item}>item</p>
+      ))}
     </div>
   );
 };

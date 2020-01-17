@@ -87,7 +87,7 @@ export const createSchedule = (projectId, name) => async dispatch => {
       body,
       config,
     );
-     
+
     dispatch({
       type: SCHEDULE_CREATED_SUCCESS,
       payload: res.data.data,
