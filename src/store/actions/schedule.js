@@ -129,6 +129,7 @@ export const getSchedule = (projectId, scheduleId) => async dispatch => {
 };
 
 export const categoriesSelected = categories => dispatch => {
+  
   dispatch({
     type: CATEGORIES_SELECTED,
     payload: categories,
